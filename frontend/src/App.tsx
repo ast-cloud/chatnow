@@ -1,14 +1,18 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Landing from './components/Landing';
 import './App.css'
 
 function App() {
 
   return (
-    <div style={{display:'flex'}}>
-      <button>Create a room</button>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <button>Join a room</button>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Landing/>}/>
+        <Route/>
+        <Route/>
+      </Routes>
+    </Router>
   )
 }
 
