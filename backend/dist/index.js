@@ -64,6 +64,9 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
             }
         }
         else if (data.type == 'message') {
+            const roomId = users[wsId].room;
+            const message = String(data.payload.message);
+            RedisClient_1.default.getInstance().addChatMessage(roomId, message);
         }
         ws.send('You have sent - ' + message);
     });
