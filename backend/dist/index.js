@@ -15,16 +15,67 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const ws_1 = require("ws");
+const RedisClient_1 = __importDefault(require("./RedisClient"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const wss = new ws_1.WebSocketServer({ server });
 app.get('/healthcheck', (req, res) => {
     res.json({ 'status': 'healthy' });
 });
+let count = 0;
+const users = {};
 wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* () {
+    const wsId = String(count++);
     ws.on('message', (message) => {
         console.log('Received message - ', String(message));
+        const data = JSON.parse(message.toString());
+        if (data.type == 'create') {
+            const roomId = generateRoomID();
+            users[wsId] = {
+                room: roomId,
+                ws: ws
+            };
+            RedisClient_1.default.getInstance().subscribe(String(wsId), String(roomId), ws);
+            ws.send(JSON.stringify({
+                'created': 'true',
+                'roomId': roomId
+            }));
+        }
+        else if (data.type == 'join') {
+            if (wsId in users) {
+                ws.send(JSON.stringify({
+                    'joined': 'false',
+                    'message': 'Already in a room'
+                }));
+            }
+            else if (!(RedisClient_1.default.getInstance().doesRoomExist(String(data.payload.roomId)))) {
+                ws.send(JSON.stringify({
+                    'joined': 'false',
+                    'message': 'Room does not exist'
+                }));
+            }
+            else if ((RedisClient_1.default.getInstance().roomParticipants(String(data.payload.roomId))) < 5) {
+                users[wsId] = { room: String(data.payload.roomId), ws: ws };
+                RedisClient_1.default.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
+                ws.send(JSON.stringify({
+                    'joined': 'true',
+                    'roomId': String(data.payload.roomId)
+                }));
+            }
+        }
+        else if (data.type == 'message') {
+        }
         ws.send('You have sent - ' + message);
     });
+    ws.on('disconnect', () => {
+        RedisClient_1.default.getInstance().unsubscribe(wsId, users[wsId].room);
+    });
 }));
+function generateRoomID() {
+    let uid;
+    do {
+        uid = String(Math.floor(Math.random() * 10000));
+    } while (RedisClient_1.default.getInstance().doesRoomExist(String(uid)));
+    return uid;
+}
 server.listen(3000, () => { console.log('Started http server on port 3000.'); });

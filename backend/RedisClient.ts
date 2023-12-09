@@ -66,7 +66,7 @@ export default class RedisSubscriptionManager{
 
     }
 
-    async addChatMessage(room:string, message:string){
+    private async addChatMessage(room:string, message:string){
         this.publish(room, {type: 'message', payload: {
             message
         }});
@@ -75,4 +75,13 @@ export default class RedisSubscriptionManager{
     publish(room:string, message:any){
         this.publisher.publish(room, JSON.stringify(message));
     }
+    
+    doesRoomExist(roomId: string){
+        return this.reverseSubscriptions.has(roomId);                
+    }
+
+    roomParticipants(roomId: string){
+        return Object.keys(this.reverseSubscriptions.get(roomId)).length;
+    }
+
 }
