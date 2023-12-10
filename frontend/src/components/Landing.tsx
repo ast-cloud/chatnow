@@ -4,6 +4,8 @@ export default function Landing(){
 
     const websocket = new WebSocket('ws://localhost:3000');
 
+    const [dialogOpen, setDialogOpen] = useState();
+
     function createRoom(){
         
     }
