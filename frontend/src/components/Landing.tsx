@@ -1,5 +1,8 @@
 import { useState } from "react";
 import {Button, Dialog, Typography, Card, CardBody, CardFooter, Input } from '@material-tailwind/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Landing(){
 
