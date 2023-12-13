@@ -33,13 +33,23 @@ wss.on('connection', async (ws, req)=>{
                 ws: ws,
                 name: data.payload.name
             }
-            RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
-            ws.send(JSON.stringify({
-                'type': 'roomCreated',
-                'payload':{
-                    'roomId': roomId
-                }
-            }));
+            try{
+                RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
+                ws.send(JSON.stringify({
+                    'type': 'roomCreated',
+                    'payload':{
+                        'roomId': roomId
+                    }
+                }));
+            }catch(e){
+                ws.send(JSON.stringify({
+                    'type': 'roomCreationFailed',
+                    'payload':{
+                        'roomId': roomId
+                    }
+                }));
+            }
+            
         }
         else if(data.type=='join'){
             if(wsId in users){
