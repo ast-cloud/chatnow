@@ -15,7 +15,7 @@ app.get('/healthcheck', (req, res)=>{
 
 let count=0;
 
-const users : {[key: string] : {room: string, ws: any}} = {};
+const users : {[key: string] : {room: string, ws: any, name: string}} = {};
 
 wss.on('connection', async (ws, req)=>{
 
@@ -30,7 +30,8 @@ wss.on('connection', async (ws, req)=>{
             const roomId = generateRoomID();
             users[wsId] = {
                 room: roomId,
-                ws: ws
+                ws: ws,
+                name: data.payload.name
             }
             RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
             ws.send(JSON.stringify({
@@ -52,7 +53,11 @@ wss.on('connection', async (ws, req)=>{
                 }));
             }
             else if((RedisSubscriptionManager.getInstance().roomParticipants(String(data.payload.roomId)))<5){
-                users[wsId] = {room: String(data.payload.roomId), ws: ws};
+                users[wsId] = {
+                    room: String(data.payload.roomId), 
+                    ws: ws,
+                    name: String(data.payload.name)
+                };
                 RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
                 ws.send(JSON.stringify({
                     'joined': 'true',
