@@ -3,7 +3,6 @@ import {Button, Dialog, Typography, Card, CardBody, CardFooter, Input } from '@m
 
 export default function Landing(){
 
-    const websocket = new WebSocket('ws://localhost:3000');
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [createOrJoin, setCreateOrJoin] = useState('create');
@@ -30,6 +29,36 @@ export default function Landing(){
 
 function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
+    const websocket = new WebSocket('ws://localhost:3000');
+
+    const [name, setName] = useState('');
+    const [roomName, setRoomName] = useState('');
+    const [roomId, setRoomId] = useState('');
+
+    websocket.onmessage = (event)=>{
+        
+    }
+
+    function handleSubmit(){
+        if(createOrJoin=='create'){
+            websocket.send(JSON.stringify({
+                type: "create",
+                payload:{
+                    name: name
+                }
+            }));
+        }
+        else{
+            websocket.send(JSON.stringify({
+                type: "join",
+                payload:{
+                    roomId: roomId,
+                    name: name,
+                }
+            }));
+        }                                     
+    }
+
     return (
         <Dialog
         size="md"
@@ -46,14 +75,14 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             <Typography className="-mb-2" variant="h6" placeholder=''>
               Enter your name (to be displayed in messages)
             </Typography>
-            <Input label="Name" size="lg" crossOrigin=""/>
+            <Input label="Name" size="lg" crossOrigin="" onChange={(e)=>{setName(e.target.value)}}/>
             <Typography className="-mb-2" variant="h6" placeholder=''>
                 {(createOrJoin=='join') ? 'Enter room code': 'Room name (Topic of discussion)'}
             </Typography>
-            {(createOrJoin=='join') ? <Input label="Room code" size="lg" crossOrigin=""/> : <Input label="Room name" size="lg" crossOrigin=""/>}
+            {(createOrJoin=='join') ? <Input label="Room code" size="lg" crossOrigin="" onChange={(e)=>{setRoomId(e.target.value)}}/> : <Input label="Room name" size="lg" crossOrigin="" onChange={(e)=>{setRoomName(e.target.value)}}/>}
           </CardBody>
           <CardFooter className="pt-0" placeholder=''>
-            <Button variant="gradient" onClick={()=>{}} fullWidth placeholder=''>
+            <Button variant="gradient" onClick={()=>{handleSubmit()}} fullWidth placeholder=''>
               {(createOrJoin=='join')?'Join':'Create'}
             </Button>
           </CardFooter>
