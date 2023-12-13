@@ -35,24 +35,38 @@ wss.on('connection', async (ws, req)=>{
             }
             RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
             ws.send(JSON.stringify({
-                'created': 'true',
-                'roomId': roomId
+                'type': 'roomCreated',
+                'payload':{
+                    'roomId': roomId
+                }
             }));
         }
         else if(data.type=='join'){
             if(wsId in users){
                 ws.send(JSON.stringify({
-                    'joined': 'false',
-                    'message': 'Already in a room'
+                    'type': 'roomJoinFailed',
+                    'payload':{
+                        'message': 'Already in a room'
+                    }
                 }));
             }
             else if(!(RedisSubscriptionManager.getInstance().doesRoomExist(String(data.payload.roomId)))){
                 ws.send(JSON.stringify({
-                    'joined': 'false',
-                    'message': 'Room does not exist'
+                    'type': 'roomJoinFailed',
+                    'payload':{
+                        'message': 'Room does not exist'
+                    }
                 }));
             }
-            else if((RedisSubscriptionManager.getInstance().roomParticipants(String(data.payload.roomId)))<5){
+            else if((RedisSubscriptionManager.getInstance().roomParticipants(String(data.payload.roomId)))>=5){
+                ws.send(JSON.stringify({
+                    'type': 'roomJoinFailed',
+                    'payload':{
+                        'message': 'Room is full (Maximum capacity: 4)'
+                    }
+                }));
+            }
+            else{
                 users[wsId] = {
                     room: String(data.payload.roomId), 
                     ws: ws,
@@ -60,8 +74,10 @@ wss.on('connection', async (ws, req)=>{
                 };
                 RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
                 ws.send(JSON.stringify({
-                    'joined': 'true',
-                    'roomId': String(data.payload.roomId)
+                    'type': 'roomJoined',
+                    'payload':{
+                        'roomId': String(data.payload.roomId)
+                    }
                 }));
             }
         }
