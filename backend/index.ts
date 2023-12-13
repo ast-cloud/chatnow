@@ -65,7 +65,7 @@ wss.on('connection', async (ws, req)=>{
             const message = String(data.payload.message);
             RedisSubscriptionManager.getInstance().addChatMessage(roomId, message);
         }
-        ws.send('You have sent - '+message);
+        
     });
     
     ws.on('disconnect', ()=>{
