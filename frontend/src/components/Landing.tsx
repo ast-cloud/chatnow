@@ -39,7 +39,19 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     const [roomId, setRoomId] = useState('');
 
     websocket.onmessage = (event)=>{
-        
+        const data = JSON.parse(event.data);
+        if(data.type=='roomCreated'){
+
+        }
+        else if(data.type=='roomJoined'){
+
+        }
+        else if(data.type=='roomCreationFailed'){
+            toast(data.payload.message);
+        }
+        else if(data.type=='roomJoinFailed'){
+            toast(data.payload.message);
+        }
     }
 
     function handleSubmit(){
