@@ -41,16 +41,18 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     websocket.onmessage = (event)=>{
         const data = JSON.parse(event.data);
         if(data.type=='roomCreated'){
-            
+            toast.success('Room ID - ', data.payload.message);
+
         }
         else if(data.type=='roomJoined'){
+            toast.success('Room ID - ', data.payload.message);
 
         }
         else if(data.type=='roomCreationFailed'){
-            toast(data.payload.message);
+            toast.error(data.payload.message);
         }
         else if(data.type=='roomJoinFailed'){
-            toast(data.payload.message);
+            toast.error(data.payload.message);
         }
     }
 
