@@ -41,7 +41,7 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     websocket.onmessage = (event)=>{
         const data = JSON.parse(event.data);
         if(data.type=='roomCreated'){
-
+            
         }
         else if(data.type=='roomJoined'){
 
@@ -75,33 +75,36 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     }
 
     return (
-        <Dialog
-        size="md"
-        open={dialogOpen}
-        handler={()=>{setDialogOpen(!dialogOpen)}}
-        placeholder=''
-        className="bg-red-50 shadow-none"
-      >
-        <Card className="mx-auto w-full" placeholder=''>
-          <CardBody className="flex flex-col gap-4" placeholder=''>
-            <Typography variant="h4" color="blue-gray" placeholder=''>
-              {(createOrJoin=='join')?'Join room':'Create a room'}
-            </Typography>
-            <Typography className="-mb-2" variant="h6" placeholder=''>
-              Enter your name (to be displayed in messages)
-            </Typography>
-            <Input label="Name" size="lg" crossOrigin="" onChange={(e)=>{setName(e.target.value)}}/>
-            <Typography className="-mb-2" variant="h6" placeholder=''>
-                {(createOrJoin=='join') ? 'Enter room code': 'Room name (Topic of discussion)'}
-            </Typography>
-            {(createOrJoin=='join') ? <Input label="Room code" size="lg" crossOrigin="" onChange={(e)=>{setRoomId(e.target.value)}}/> : <Input label="Room name" size="lg" crossOrigin="" onChange={(e)=>{setRoomName(e.target.value)}}/>}
-          </CardBody>
-          <CardFooter className="pt-0" placeholder=''>
-            <Button variant="gradient" onClick={()=>{handleSubmit()}} fullWidth placeholder=''>
-              {(createOrJoin=='join')?'Join':'Create'}
-            </Button>
-          </CardFooter>
-        </Card>
-      </Dialog>
+        <>
+            <Dialog
+            size="md"
+            open={dialogOpen}
+            handler={()=>{setDialogOpen(!dialogOpen)}}
+            placeholder=''
+            className="bg-red-50 shadow-none"
+            >
+                <Card className="mx-auto w-full" placeholder=''>
+                    <CardBody className="flex flex-col gap-4" placeholder=''>
+                        <Typography variant="h4" color="blue-gray" placeholder=''>
+                        {(createOrJoin=='join')?'Join room':'Create a room'}
+                        </Typography>
+                        <Typography className="-mb-2" variant="h6" placeholder=''>
+                        Enter your name (to be displayed in messages)
+                        </Typography>
+                        <Input label="Name" size="lg" crossOrigin="" onChange={(e)=>{setName(e.target.value)}}/>
+                        <Typography className="-mb-2" variant="h6" placeholder=''>
+                            {(createOrJoin=='join') ? 'Enter room code': 'Room name (Topic of discussion)'}
+                        </Typography>
+                        {(createOrJoin=='join') ? <Input label="Room code" size="lg" crossOrigin="" onChange={(e)=>{setRoomId(e.target.value)}}/> : <Input label="Room name" size="lg" crossOrigin="" onChange={(e)=>{setRoomName(e.target.value)}}/>}
+                    </CardBody>
+                    <CardFooter className="pt-0" placeholder=''>
+                        <Button variant="gradient" onClick={()=>{handleSubmit()}} fullWidth placeholder=''>
+                        {(createOrJoin=='join')?'Join':'Create'}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </Dialog>
+            <ToastContainer/>
+      </>
     );
 }
