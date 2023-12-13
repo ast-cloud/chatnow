@@ -45,7 +45,7 @@ wss.on('connection', async (ws, req)=>{
                 ws.send(JSON.stringify({
                     'type': 'roomCreationFailed',
                     'payload':{
-                        'roomId': roomId
+                        'message':''
                     }
                 }));
             }
