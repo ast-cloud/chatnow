@@ -12,20 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = require("redis");
 class RedisSubscriptionManager {
     constructor() {
-        this.subscriber = (0, redis_1.createClient)({
-            password: 'nTVLWbrCKGmyLWEwbx6QEuXgbvx0tNZL',
-            socket: {
-                host: 'redis-19911.c212.ap-south-1-1.ec2.cloud.redislabs.com',
-                port: 19911
-            }
-        });
-        this.publisher = (0, redis_1.createClient)({
-            password: 'nTVLWbrCKGmyLWEwbx6QEuXgbvx0tNZL',
-            socket: {
-                host: 'redis-19911.c212.ap-south-1-1.ec2.cloud.redislabs.com',
-                port: 19911
-            }
-        });
+        this.subscriber = (0, redis_1.createClient)();
+        this.publisher = (0, redis_1.createClient)();
         this.publisher.connect();
         this.subscriber.connect();
         this.subscriptions = new Map();
