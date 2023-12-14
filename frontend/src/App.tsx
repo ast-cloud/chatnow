@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Landing from './components/Landing';
-import './App.css'
+import ChatPage from './components/ChatPage';
 
 function App() {
 
@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Landing/>}/>
-        <Route/>
+        <Route path='/chat' element={<ChatPage/>}/>
         <Route/>
       </Routes>
     </Router>
