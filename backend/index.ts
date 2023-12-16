@@ -27,6 +27,7 @@ wss.on('connection', async (ws, req)=>{
         const data = JSON.parse(message.toString());
 
         if(data.type=='create'){
+            console.log('New create room request received.');
             const roomId = generateRoomID();
             users[wsId] = {
                 room: roomId,
@@ -52,6 +53,7 @@ wss.on('connection', async (ws, req)=>{
             
         }
         else if(data.type=='join'){
+            console.log('New join room request received.');
             if(wsId in users){
                 ws.send(JSON.stringify({
                     'type': 'roomJoinFailed',
