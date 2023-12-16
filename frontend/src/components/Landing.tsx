@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {Button, Dialog, Typography, Card, CardBody, CardFooter, Input } from '@material-tailwind/react';
+import { useNavigate } from "react-router-dom";
+import WSManager from "../lib/ws";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,33 +34,28 @@ export default function Landing(){
 
 function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
-    const websocket = new WebSocket('ws://localhost:3000');
+    const [navigateToUrl, setNavigateToUrl] = useState<string|null>(null);
+
+    useEffect(function(){
+        WSManager.getInstance(setNavigateToUrl);
+    },[]);
 
     const [name, setName] = useState('');
     const [roomName, setRoomName] = useState('');
     const [roomId, setRoomId] = useState('');
 
-    websocket.onmessage = (event)=>{
-        const data = JSON.parse(event.data);
-        if(data.type=='roomCreated'){
-            toast.success('Room ID - ', data.payload.message);
+    const navigate = useNavigate();
 
+    useEffect(function(){
+        if(navigateToUrl){
+            navigate(navigateToUrl);
         }
-        else if(data.type=='roomJoined'){
-            toast.success('Room ID - ', data.payload.message);
-
-        }
-        else if(data.type=='roomCreationFailed'){
-            toast.error(data.payload.message);
-        }
-        else if(data.type=='roomJoinFailed'){
-            toast.error(data.payload.message);
-        }
-    }
+    }, [navigateToUrl]);
+    
 
     function handleSubmit(){
         if(createOrJoin=='create'){
-            websocket.send(JSON.stringify({
+            WSManager.getInstance().sendData(JSON.stringify({
                 type: "create",
                 payload:{
                     name: name
@@ -66,7 +63,7 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             }));
         }
         else{
-            websocket.send(JSON.stringify({
+            WSManager.getInstance().sendData(JSON.stringify({
                 type: "join",
                 payload:{
                     roomId: roomId,
@@ -105,8 +102,8 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
                         </Button>
                     </CardFooter>
                 </Card>
-            </Dialog>
             <ToastContainer/>
+            </Dialog>
       </>
     );
 }
