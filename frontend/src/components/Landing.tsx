@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import {Button, Dialog, Typography, Card, CardBody, CardFooter, Input } from '@material-tailwind/react';
 import { useNavigate } from "react-router-dom";
 import WSManager from "../lib/ws";
-import { ToastContainer, toast } from 'react-toastify';
+import {useRecoilState} from 'recoil';
+import { chatMessages } from '../lib/atoms/chatPage';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -36,8 +38,10 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
     const [navigateToUrl, setNavigateToUrl] = useState<string|null>(null);
 
+    const [messages, setMessages] = useRecoilState(chatMessages);
+
     useEffect(function(){
-        WSManager.getInstance(setNavigateToUrl);
+        WSManager.getInstance(setNavigateToUrl, messages, setMessages);
     },[]);
 
     const [name, setName] = useState('');
@@ -58,7 +62,8 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             WSManager.getInstance().sendData(JSON.stringify({
                 type: "create",
                 payload:{
-                    name: name
+                    name: name,
+                    roomName: roomName
                 }
             }));
         }
