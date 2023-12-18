@@ -46,6 +46,15 @@ export default class WSManager{
         this.websocket.send(data);
     }
 
+    sendMessage(message: string){
+        this.sendData(JSON.stringify({
+            type: 'message',
+            payload:{
+                message: message
+            }
+        }));
+    }
+
     closeConnection(){
         if(this.websocket.readyState == this.websocket.OPEN){
             this.websocket.close();
