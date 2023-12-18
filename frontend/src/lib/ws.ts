@@ -20,7 +20,7 @@ export default class WSManager{
             }
             else if(data.type=='roomJoined'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                setNavigateToUrl('/chat'+String(data.payload.roomName));
+                setNavigateToUrl('/chat/'+String(data.payload.roomName));
             }
             else if(data.type=='roomCreationFailed'){
                 toast.error(data.payload.message);
@@ -33,6 +33,10 @@ export default class WSManager{
             }
         }
 
+    }
+
+    getState(){
+        return this.websocket.readyState;
     }
 
     static getInstance(setNavigateToUrl?, setMessages?){

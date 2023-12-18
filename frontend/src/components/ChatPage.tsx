@@ -1,12 +1,15 @@
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { Button, Textarea } from '@material-tailwind/react';
 import {useRecoilValue} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
+import WSManager from "../lib/ws";
+
 
 
 export default function ChatPage(){
     
+    const [newMessage, setNewMessage] = useState<string>('');
 
     const messages = useRecoilValue(chatMessages);
 
@@ -16,6 +19,13 @@ export default function ChatPage(){
       console.log('messages - ', messages);
     }, [messages]);
     
+    function handleChange(event){
+        setNewMessage(event.target.value);
+    }
+    
+    function handleSend(){
+        WSManager.getInstance().sendMessage(newMessage);
+    }
 
     return <div className='flex flex-col justify-between h-screen'>
         <div className='w-full h-20 bg-[#F5F3F3]'>
@@ -25,9 +35,9 @@ export default function ChatPage(){
 
         </div>
         <div className='w-full h-21 bg-[#F5F3F3] flex flex-row p-5 flex-g'>
-            <Textarea placeholder='Type a message' className='w-12/14 bg-white'/>
+            <Textarea placeholder='Type a message' className='w-12/14 bg-white' onChange={handleChange}/>
             <div className='w-2'/>
-            <Button placeholder='' className='w-2/14 h-10 place-self-center'>Send</Button>
+            <Button placeholder='' className='w-2/14 h-10 place-self-center' onClick={handleSend}>Send</Button>
         </div>
     </div>
 }
