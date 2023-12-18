@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {Button, Dialog, Typography, Card, CardBody, CardFooter, Input } from '@material-tailwind/react';
 import { useNavigate } from "react-router-dom";
 import WSManager from "../lib/ws";
-import {useRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +38,7 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
     const [navigateToUrl, setNavigateToUrl] = useState<string|null>(null);
 
-    const [messages, setMessages] = useRecoilState(chatMessages);
+    const setMessages = useSetRecoilState(chatMessages);
 
     useEffect(function(){
         WSManager.getInstance(setNavigateToUrl, setMessages);
