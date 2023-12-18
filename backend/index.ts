@@ -28,27 +28,38 @@ wss.on('connection', async (ws, req)=>{
 
         if(data.type=='create'){
             console.log('New create room request received.');
-            const roomId = generateRoomID();
-            users[wsId] = {
-                room: roomId,
-                ws: ws,
-                name: data.payload.name
-            }
-            try{
-                RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
-                ws.send(JSON.stringify({
-                    'type': 'roomCreated',
-                    'payload':{
-                        'roomId': roomId
-                    }
-                }));
-            }catch(e){
+            if(wsId in users){
                 ws.send(JSON.stringify({
                     'type': 'roomCreationFailed',
                     'payload':{
-                        'message':''
+                        'message': 'Already in a room'
                     }
                 }));
+            }
+            else{
+
+                const roomId = generateRoomID();
+                users[wsId] = {
+                    room: roomId,
+                    ws: ws,
+                    name: data.payload.name
+                }
+                try{
+                    RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
+                    ws.send(JSON.stringify({
+                        'type': 'roomCreated',
+                        'payload':{
+                            'roomId': roomId
+                        }
+                    }));
+                }catch(e){
+                    ws.send(JSON.stringify({
+                        'type': 'roomCreationFailed',
+                        'payload':{
+                            'message':''
+                        }
+                    }));
+                }
             }
             
         }

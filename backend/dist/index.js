@@ -30,36 +30,69 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
         console.log('Received message - ', String(message));
         const data = JSON.parse(message.toString());
         if (data.type == 'create') {
+            console.log('New create room request received.');
             const roomId = generateRoomID();
             users[wsId] = {
                 room: roomId,
-                ws: ws
+                ws: ws,
+                name: data.payload.name
             };
-            RedisClient_1.default.getInstance().subscribe(String(wsId), String(roomId), ws);
-            ws.send(JSON.stringify({
-                'created': 'true',
-                'roomId': roomId
-            }));
+            try {
+                RedisClient_1.default.getInstance().subscribe(String(wsId), String(roomId), ws);
+                ws.send(JSON.stringify({
+                    'type': 'roomCreated',
+                    'payload': {
+                        'roomId': roomId
+                    }
+                }));
+            }
+            catch (e) {
+                ws.send(JSON.stringify({
+                    'type': 'roomCreationFailed',
+                    'payload': {
+                        'message': ''
+                    }
+                }));
+            }
         }
         else if (data.type == 'join') {
+            console.log('New join room request received.');
             if (wsId in users) {
                 ws.send(JSON.stringify({
-                    'joined': 'false',
-                    'message': 'Already in a room'
+                    'type': 'roomJoinFailed',
+                    'payload': {
+                        'message': 'Already in a room'
+                    }
                 }));
             }
             else if (!(RedisClient_1.default.getInstance().doesRoomExist(String(data.payload.roomId)))) {
                 ws.send(JSON.stringify({
-                    'joined': 'false',
-                    'message': 'Room does not exist'
+                    'type': 'roomJoinFailed',
+                    'payload': {
+                        'message': 'Room does not exist'
+                    }
                 }));
             }
-            else if ((RedisClient_1.default.getInstance().roomParticipants(String(data.payload.roomId))) < 5) {
-                users[wsId] = { room: String(data.payload.roomId), ws: ws };
+            else if ((RedisClient_1.default.getInstance().roomParticipants(String(data.payload.roomId))) >= 5) {
+                ws.send(JSON.stringify({
+                    'type': 'roomJoinFailed',
+                    'payload': {
+                        'message': 'Room is full (Maximum capacity: 4)'
+                    }
+                }));
+            }
+            else {
+                users[wsId] = {
+                    room: String(data.payload.roomId),
+                    ws: ws,
+                    name: String(data.payload.name)
+                };
                 RedisClient_1.default.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
                 ws.send(JSON.stringify({
-                    'joined': 'true',
-                    'roomId': String(data.payload.roomId)
+                    'type': 'roomJoined',
+                    'payload': {
+                        'roomId': String(data.payload.roomId)
+                    }
                 }));
             }
         }
@@ -68,7 +101,6 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
             const message = String(data.payload.message);
             RedisClient_1.default.getInstance().addChatMessage(roomId, message);
         }
-        ws.send('You have sent - ' + message);
     });
     ws.on('disconnect', () => {
         RedisClient_1.default.getInstance().unsubscribe(wsId, users[wsId].room);
