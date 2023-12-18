@@ -15,12 +15,12 @@ export default class WSManager{
             const data = JSON.parse(event.data);
             if(data.type=='roomCreated'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                console.log('About to call navigate("/chat")');
-                setNavigateToUrl('/chat');
+                console.log(`About to call navigate("/chat/${data.payload.roomName}")`);
+                setNavigateToUrl('/chat/'+String(data.payload.roomName));
             }
             else if(data.type=='roomJoined'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                setNavigateToUrl('/chat');
+                setNavigateToUrl('/chat'+String(data.payload.roomName));
             }
             else if(data.type=='roomCreationFailed'){
                 toast.error(data.payload.message);

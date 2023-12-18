@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 import { Button, Textarea } from '@material-tailwind/react';
 import {useRecoilValue} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
@@ -8,15 +9,17 @@ export default function ChatPage(){
     
 
     const messages = useRecoilValue(chatMessages);
+
+    const {roomName} = useParams();
     
     useEffect(() => {
       console.log('messages - ', messages);
-    }, [messages])
+    }, [messages]);
     
 
     return <div className='flex flex-col justify-between h-screen'>
         <div className='w-full h-20 bg-[#F5F3F3]'>
-            ChatPage
+            Room name : {roomName}
         </div>
         <div className='flex-grow'>
 

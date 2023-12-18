@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Landing/>}/>
-        <Route path='/chat' element={<ChatPage/>}/>
+        <Route path='/chat/:roomName' element={<ChatPage/>}/>
         <Route/>
       </Routes>
     </Router>
