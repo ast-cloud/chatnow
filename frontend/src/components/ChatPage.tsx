@@ -1,17 +1,13 @@
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import { Button, Textarea } from '@material-tailwind/react';
-import {useRecoilState} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 
-type message = {
-    name: string;
-    text: string;
-}
 
 export default function ChatPage(){
     
 
-    const [messages, setMessages] = useRecoilState(chatMessages);
+    const messages = useRecoilValue(chatMessages);
     
     useEffect(() => {
       console.log('messages - ', messages);
