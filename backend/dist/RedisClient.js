@@ -49,10 +49,11 @@ class RedisSubscriptionManager {
             this.reverseSubscriptions.delete(room);
         }
     }
-    addChatMessage(room, message) {
+    addChatMessage(room, name, message) {
         return __awaiter(this, void 0, void 0, function* () {
             this.publish(room, { type: 'message', payload: {
-                    message
+                    name: name,
+                    message: message
                 } });
         });
     }

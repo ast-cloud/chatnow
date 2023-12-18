@@ -17,6 +17,8 @@ let count=0;
 
 const users : {[key: string] : {room: string, ws: any, name: string}} = {};
 
+const rooms : {[roomId : string] : {roomName: string}} = {};
+
 wss.on('connection', async (ws, req)=>{
 
     const wsId = String(count++);
@@ -44,6 +46,9 @@ wss.on('connection', async (ws, req)=>{
                     ws: ws,
                     name: data.payload.name
                 }
+                rooms[roomId] = {
+                    roomName: data.payload.roomName
+                }
                 try{
                     RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(roomId), ws);
                     ws.send(JSON.stringify({
@@ -53,6 +58,8 @@ wss.on('connection', async (ws, req)=>{
                         }
                     }));
                 }catch(e){
+                    delete users[wsId];
+                    delete rooms[roomId];
                     ws.send(JSON.stringify({
                         'type': 'roomCreationFailed',
                         'payload':{
@@ -95,19 +102,40 @@ wss.on('connection', async (ws, req)=>{
                     ws: ws,
                     name: String(data.payload.name)
                 };
-                RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
-                ws.send(JSON.stringify({
-                    'type': 'roomJoined',
-                    'payload':{
-                        'roomId': String(data.payload.roomId)
-                    }
-                }));
+                try{
+                    RedisSubscriptionManager.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
+                    ws.send(JSON.stringify({
+                        'type': 'roomJoined',
+                        'payload':{
+                            'roomId': String(data.payload.roomId)
+                        }
+                    }));
+                }catch(e){
+                    delete users[wsId];
+                    ws.send(JSON.stringify({
+                        'type': 'roomJoinFailed',
+                        'payload':{
+                            'message':''
+                        }
+                    }));
+                }
             }
         }
         else if(data.type=='message'){
-            const roomId = users[wsId].room;
-            const message = String(data.payload.message);
-            RedisSubscriptionManager.getInstance().addChatMessage(roomId, message);
+            if(!(wsId in users)){
+                ws.send(JSON.stringify({
+                    'type': 'messageSendingFailed',
+                    'payload':{
+                        'message': 'No room joined yet.'
+                    }
+                }));
+            }
+            else{
+                const roomId = users[wsId].room;
+                const name = users[wsId].name;
+                const message = String(data.payload.message);
+                RedisSubscriptionManager.getInstance().addChatMessage(roomId, name, message);
+            }
         }
         
     });

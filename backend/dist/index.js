@@ -24,6 +24,7 @@ app.get('/healthcheck', (req, res) => {
 });
 let count = 0;
 const users = {};
+const rooms = {};
 wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* () {
     const wsId = String(count++);
     ws.on('message', (message) => {
@@ -31,28 +32,43 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
         const data = JSON.parse(message.toString());
         if (data.type == 'create') {
             console.log('New create room request received.');
-            const roomId = generateRoomID();
-            users[wsId] = {
-                room: roomId,
-                ws: ws,
-                name: data.payload.name
-            };
-            try {
-                RedisClient_1.default.getInstance().subscribe(String(wsId), String(roomId), ws);
-                ws.send(JSON.stringify({
-                    'type': 'roomCreated',
-                    'payload': {
-                        'roomId': roomId
-                    }
-                }));
-            }
-            catch (e) {
+            if (wsId in users) {
                 ws.send(JSON.stringify({
                     'type': 'roomCreationFailed',
                     'payload': {
-                        'message': ''
+                        'message': 'Already in a room'
                     }
                 }));
+            }
+            else {
+                const roomId = generateRoomID();
+                users[wsId] = {
+                    room: roomId,
+                    ws: ws,
+                    name: data.payload.name
+                };
+                rooms[roomId] = {
+                    roomName: data.payload.roomName
+                };
+                try {
+                    RedisClient_1.default.getInstance().subscribe(String(wsId), String(roomId), ws);
+                    ws.send(JSON.stringify({
+                        'type': 'roomCreated',
+                        'payload': {
+                            'roomId': roomId
+                        }
+                    }));
+                }
+                catch (e) {
+                    delete users[wsId];
+                    delete rooms[roomId];
+                    ws.send(JSON.stringify({
+                        'type': 'roomCreationFailed',
+                        'payload': {
+                            'message': ''
+                        }
+                    }));
+                }
             }
         }
         else if (data.type == 'join') {
@@ -87,19 +103,41 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                     ws: ws,
                     name: String(data.payload.name)
                 };
-                RedisClient_1.default.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
-                ws.send(JSON.stringify({
-                    'type': 'roomJoined',
-                    'payload': {
-                        'roomId': String(data.payload.roomId)
-                    }
-                }));
+                try {
+                    RedisClient_1.default.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
+                    ws.send(JSON.stringify({
+                        'type': 'roomJoined',
+                        'payload': {
+                            'roomId': String(data.payload.roomId)
+                        }
+                    }));
+                }
+                catch (e) {
+                    delete users[wsId];
+                    ws.send(JSON.stringify({
+                        'type': 'roomJoinFailed',
+                        'payload': {
+                            'message': ''
+                        }
+                    }));
+                }
             }
         }
         else if (data.type == 'message') {
-            const roomId = users[wsId].room;
-            const message = String(data.payload.message);
-            RedisClient_1.default.getInstance().addChatMessage(roomId, message);
+            if (!(wsId in users)) {
+                ws.send(JSON.stringify({
+                    'type': 'messageSendingFailed',
+                    'payload': {
+                        'message': 'No room joined yet.'
+                    }
+                }));
+            }
+            else {
+                const roomId = users[wsId].room;
+                const name = users[wsId].name;
+                const message = String(data.payload.message);
+                RedisClient_1.default.getInstance().addChatMessage(roomId, name, message);
+            }
         }
     });
     ws.on('disconnect', () => {

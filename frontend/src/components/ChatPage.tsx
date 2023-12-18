@@ -1,5 +1,7 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Button, Textarea } from '@material-tailwind/react';
+import {useRecoilState} from 'recoil';
+import { chatMessages } from '../lib/atoms/chatPage';
 
 type message = {
     name: string;
@@ -8,7 +10,13 @@ type message = {
 
 export default function ChatPage(){
     
-    const [messages, setMessages] = useState<message[]|null>(null);
+
+    const [messages, setMessages] = useRecoilState(chatMessages);
+    
+    useEffect(() => {
+      console.log('messages - ', messages);
+    }, [messages])
+    
 
     return <div className='flex flex-col justify-between h-screen'>
         <div className='w-full h-20 bg-[#F5F3F3]'>
