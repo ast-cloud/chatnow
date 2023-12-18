@@ -7,9 +7,8 @@ export default class WSManager{
     public static instance: WSManager;
     private websocket: WebSocket;
     
-    private constructor(setNavigateToUrl){
+    private constructor(setNavigateToUrl, messages, setMessages){
         
-
         this.websocket = new WebSocket('ws://localhost:3000');
 
         this.websocket.onmessage = (event)=>{
@@ -29,13 +28,16 @@ export default class WSManager{
             else if(data.type=='roomJoinFailed'){
                 toast.error(data.payload.message);
             }
+            else if(data.type=='message'){
+                setMessages([...messages, data.payload.message]);
+            }
         }
 
     }
 
-    static getInstance(setNavigateToUrl?){
+    static getInstance(setNavigateToUrl?, messages?, setMessages?){
         if(!this.instance){
-            this.instance = new WSManager(setNavigateToUrl);
+            this.instance = new WSManager(setNavigateToUrl, messages, setMessages);
         }
         return this.instance;
     }
