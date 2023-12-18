@@ -41,7 +41,7 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     const [messages, setMessages] = useRecoilState(chatMessages);
 
     useEffect(function(){
-        WSManager.getInstance(setNavigateToUrl, messages, setMessages);
+        WSManager.getInstance(setNavigateToUrl, setMessages);
     },[]);
 
     const [name, setName] = useState('');

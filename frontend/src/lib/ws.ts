@@ -7,7 +7,7 @@ export default class WSManager{
     public static instance: WSManager;
     private websocket: WebSocket;
     
-    private constructor(setNavigateToUrl, messages, setMessages){
+    private constructor(setNavigateToUrl, setMessages){
         
         this.websocket = new WebSocket('ws://localhost:3000');
 
@@ -29,15 +29,15 @@ export default class WSManager{
                 toast.error(data.payload.message);
             }
             else if(data.type=='message'){
-                setMessages([...messages, data.payload.message]);
+                setMessages(messages => [...messages, data.payload.message]);
             }
         }
 
     }
 
-    static getInstance(setNavigateToUrl?, messages?, setMessages?){
+    static getInstance(setNavigateToUrl?, setMessages?){
         if(!this.instance){
-            this.instance = new WSManager(setNavigateToUrl, messages, setMessages);
+            this.instance = new WSManager(setNavigateToUrl, setMessages);
         }
         return this.instance;
     }
