@@ -46,4 +46,10 @@ export default class WSManager{
         this.websocket.send(data);
     }
 
+    closeConnection(){
+        if(this.websocket.readyState == this.websocket.OPEN){
+            this.websocket.close();
+        }
+    }
+
 }
