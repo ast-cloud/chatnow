@@ -55,7 +55,8 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                     ws.send(JSON.stringify({
                         'type': 'roomCreated',
                         'payload': {
-                            'roomId': roomId
+                            'roomId': roomId,
+                            'roomName': rooms[roomId].roomName
                         }
                     }));
                 }
@@ -108,7 +109,8 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                     ws.send(JSON.stringify({
                         'type': 'roomJoined',
                         'payload': {
-                            'roomId': String(data.payload.roomId)
+                            'roomId': String(data.payload.roomId),
+                            'roomName': rooms[data.payload.roomId].roomName
                         }
                     }));
                 }

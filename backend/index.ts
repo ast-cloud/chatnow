@@ -109,7 +109,7 @@ wss.on('connection', async (ws, req)=>{
                         'type': 'roomJoined',
                         'payload':{
                             'roomId': String(data.payload.roomId),
-                            'roomName': String(data.payload.roomName)
+                            'roomName': rooms[data.payload.roomId].roomName
                         }
                     }));
                 }catch(e){
