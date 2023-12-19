@@ -136,7 +136,22 @@ wss.on('connection', async (ws, req)=>{
                 const roomId = users[wsId].room;
                 const name = users[wsId].name;
                 const message = String(data.payload.message);
-                RedisSubscriptionManager.getInstance().addChatMessage(roomId, name, message);
+                try{
+                    RedisSubscriptionManager.getInstance().addChatMessage(roomId, name, message);
+                    ws.send(JSON.stringify({
+                        'type': 'messageSentSuccessfully',
+                        'payload':{
+                            'message': ''
+                        }
+                    }));
+                }catch(e){
+                    ws.send(JSON.stringify({
+                        'type': 'messageSendingFailed',
+                        'payload':{
+                            'message': 'No room joined yet.'
+                        }
+                    }));
+                }
             }
         }
         
