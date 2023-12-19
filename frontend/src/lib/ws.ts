@@ -7,7 +7,7 @@ export default class WSManager{
     public static instance: WSManager;
     private websocket: WebSocket;
     
-    private constructor(setNavigateToUrl, setMessages){
+    private constructor(setChatRouteData, setMessages){
         
         this.websocket = new WebSocket('ws://localhost:3000');
 
@@ -15,12 +15,12 @@ export default class WSManager{
             const data = JSON.parse(event.data);
             if(data.type=='roomCreated'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                console.log(`About to call navigate("/chat/${data.payload.roomName}")`);
-                setNavigateToUrl('/chat/'+String(data.payload.roomName));
+                console.log(`About to call navigate("/chat")`);
+                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName});
             }
             else if(data.type=='roomJoined'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                setNavigateToUrl('/chat/'+String(data.payload.roomName));
+                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName});
             }
             else if(data.type=='roomCreationFailed'){
                 toast.error(data.payload.message);
@@ -39,9 +39,9 @@ export default class WSManager{
         return this.websocket.readyState;
     }
 
-    static getInstance(setNavigateToUrl?, setMessages?){
+    static getInstance(setChatRouteData?, setMessages?){
         if(!this.instance){
-            this.instance = new WSManager(setNavigateToUrl, setMessages);
+            this.instance = new WSManager(setChatRouteData, setMessages);
         }
         return this.instance;
     }
