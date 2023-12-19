@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
-import { Button, Textarea } from '@material-tailwind/react';
+import { Button, Textarea, Typography } from '@material-tailwind/react';
 import {useRecoilValue} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 import WSManager from "../lib/ws";
@@ -19,8 +19,20 @@ export default function ChatPage(){
     const {roomId, roomName} = state;
     
     useEffect(() => {
-      console.log('messages - ', messages);
+        console.log('messages - ', messages);
+        const scrollableDiv = document.getElementById('chatDiv');
+        // scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        scrollableDiv.scrollTo({
+            top: scrollableDiv.scrollHeight,
+            behavior: 'smooth'
+          });
     }, [messages]);
+
+    useEffect(()=>{
+        return ()=>{
+            WSManager.getInstance().closeConnection();            
+        }
+    },[]);
     
     function handleChange(event){
         setNewMessage(event.target.value);
@@ -31,6 +43,7 @@ export default function ChatPage(){
         if(data['type']=='messageSentSuccessfully'){
             console.log('Message sent succesfully');
             setNewMessage('');
+            
         }
         else if(data['type']=='messageSendingFailed'){
             toast.error(data['payload'].message);
@@ -41,8 +54,13 @@ export default function ChatPage(){
         <div className='w-full h-20 bg-[#F5F3F3]'>
             Room name : {roomName} &nbsp; Room ID : {roomId}
         </div>
-        <div className='flex-grow'>
-
+        <div id='chatDiv' className='flex-grow overflow-y-auto'>
+            {messages.map((m, index)=>(
+                <div key={`message_${index}`} className='flex flex-col bg-[#f5f3f3] m-4 p-1 pl-2 max-w-[50vw] rounded-md'>
+                    <p style={{fontSize:'14px'}}>{m.name}</p>                                        
+                    <Typography placeholder='' variant='lead'>{m.message}</Typography>                                        
+                </div>
+            ))}
         </div>
         <div className='w-full h-21 bg-[#F5F3F3] flex flex-row p-5 flex-g'>
             <Textarea placeholder='Type a message' className='w-12/14 bg-white' value={newMessage} onChange={handleChange}/>
