@@ -50,13 +50,28 @@ export default class WSManager{
         this.websocket.send(data);
     }
 
-    sendMessage(message: string){
-        this.sendData(JSON.stringify({
-            type: 'message',
-            payload:{
-                message: message
-            }
-        }));
+    async sendMessage(message: string){
+
+        const responsePromise = new Promise((resolve)=>{
+            const tempCallback = (event)=>{
+                const data = JSON.parse(event.data);
+                if(data.type=='messageSentSuccessfully' || data.type=='messageSendingFailed'){
+                    resolve(data);
+                    this.websocket.removeEventListener('message', tempCallback);
+                }
+
+            };
+            this.websocket.addEventListener('message', tempCallback);
+            this.sendData(JSON.stringify({
+                type: 'message',
+                payload:{
+                    message: message
+                }
+            }));
+        });
+
+        return responsePromise;
+        
     }
 
     closeConnection(){
