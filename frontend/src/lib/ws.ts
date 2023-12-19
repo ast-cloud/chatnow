@@ -15,7 +15,6 @@ export default class WSManager{
             const data = JSON.parse(event.data);
             if(data.type=='roomCreated'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                console.log(`About to call navigate("/chat")`);
                 setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName});
             }
             else if(data.type=='roomJoined'){
