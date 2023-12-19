@@ -48,5 +48,6 @@ export default function ChatPage(){
             <div className='w-2'/>
             <Button placeholder='' className='w-2/14 h-10 place-self-center' onClick={handleSend}>Send</Button>
         </div>
+        <ToastContainer/>
     </div>
 }
