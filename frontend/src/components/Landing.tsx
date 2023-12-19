@@ -7,7 +7,10 @@ import { chatMessages } from '../lib/atoms/chatPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
+type chatPageData = {
+    url: string;
+    roomId: string;
+};
 export default function Landing(){
 
 
@@ -36,12 +39,12 @@ export default function Landing(){
 
 function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
-    const [navigateToUrl, setNavigateToUrl] = useState<string|null>(null);
+    const [chatRouteData, setChatRouteData] = useState<chatPageData|null>(null);
 
     const setMessages = useSetRecoilState(chatMessages);
 
     useEffect(function(){
-        WSManager.getInstance(setNavigateToUrl, setMessages);
+        WSManager.getInstance(setChatRouteData, setMessages);
     },[]);
 
     const [name, setName] = useState('');
@@ -51,10 +54,10 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     const navigate = useNavigate();
 
     useEffect(function(){
-        if(navigateToUrl){
-            navigate(navigateToUrl);
+        if(chatRouteData){
+            navigate('/chat', {state: chatRouteData});
         }
-    }, [navigateToUrl]);
+    }, [chatRouteData]);
     
 
     function handleSubmit(){
