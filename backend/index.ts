@@ -62,7 +62,8 @@ wss.on('connection', async (ws, req)=>{
                         'type': 'roomCreated',
                         'payload':{
                             'roomId': roomId,
-                            'roomName': rooms[roomId].roomName
+                            'roomName': rooms[roomId].roomName,
+                            'userId': wsId
                         }
                     }));
                 }catch(e){
@@ -119,7 +120,8 @@ wss.on('connection', async (ws, req)=>{
                         'type': 'roomJoined',
                         'payload':{
                             'roomId': String(data.payload.roomId),
-                            'roomName': rooms[data.payload.roomId].roomName
+                            'roomName': rooms[data.payload.roomId].roomName,
+                            'userId': wsId
                         }
                     }));
                 }catch(e){
