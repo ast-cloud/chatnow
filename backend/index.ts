@@ -5,7 +5,7 @@ import RedisSubscriptionManager from './RedisClient';
 
 const userColors = {
     nextColor : 0,
-    colors : ['red', 'blue', 'green', 'yellow']
+    colors : ['violet', 'lightblue', 'lightgreen', 'orange']
 }
 
 const app = express();
