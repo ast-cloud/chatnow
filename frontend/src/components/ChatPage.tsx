@@ -58,7 +58,7 @@ export default function ChatPage(){
             <Typography placeholder='' variant='h5'>
                 {roomName} 
             </Typography>
-            <Typography placeholder='' variant='h5'>
+            <Typography placeholder='' variant='h5' style={{color:'grey'}}>
                 (Room ID : {roomId})
             </Typography>
         </div>
