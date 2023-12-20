@@ -53,7 +53,7 @@ export default function ChatPage(){
 
     return <div className='flex flex-col justify-between h-screen'>
 
-        <div className='w-full h-20 px-5 bg-[#F5F3F3] font-bold flex flex-row justify-between items-center' style={{color:'#414142'}}>
+        <div className='w-full h-20 px-5 bg-[#F5F3F3] font-bold flex-shrink-0 flex flex-row justify-between items-center' style={{color:'#414142'}}>
             <Typography placeholder='' variant='h5'>
                 {roomName} 
             </Typography>
@@ -62,11 +62,11 @@ export default function ChatPage(){
             </Typography>
         </div>
 
-        <div id='chatDiv' className='flex-grow overflow-y-auto'>
+        <div id='chatDiv' className='flex-grow overflow-y-auto bg-[#EFEAE2]'>
             {messages.map((m, index)=>(
-                <div key={`message_${index}`} className='flex flex-col bg-[#f5f3f3] m-4 p-2 pl-4 max-w-[50vw] rounded-lg'>
+                <div key={`message_${index}`} className='flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg'>
                     <p style={{fontSize:'14px', fontWeight:'bold'}}>{m.name}</p>                                        
-                    <p style={{fontSize:'16px'}}>{m.message}</p>                          
+                    <p style={{fontSize:'16px', wordWrap:'break-word', whiteSpace:'pre-wrap', color:'#414142'}}>{m.message}</p>                          
                 </div>
             ))}
         </div>
