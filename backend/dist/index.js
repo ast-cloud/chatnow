@@ -18,7 +18,7 @@ const ws_1 = require("ws");
 const RedisClient_1 = __importDefault(require("./RedisClient"));
 const userColors = {
     nextColor: 0,
-    colors: ['red', 'blue', 'green', 'yellow']
+    colors: ['violet', 'lightblue', 'lightgreen', 'orange']
 };
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
