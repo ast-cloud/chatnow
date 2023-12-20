@@ -66,7 +66,7 @@ export default function ChatPage(){
         <div id='chatDiv' className='flex-grow overflow-y-auto bg-[#EFEAE2]'>
             {messages.map((m, index)=>(
                 <div key={`message_${index}`} className='flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg'>
-                    <p style={{fontSize:'14px', fontWeight:'bold'}}>{m.name}</p>                                        
+                    <p style={{fontSize:'14px', fontWeight:'bold', color: m.color}}>{m.name}</p>                                        
                     <p style={{fontSize:'16px', wordWrap:'break-word', whiteSpace:'pre-wrap', color:'#414142'}}>{m.message}</p>                          
                 </div>
             ))}

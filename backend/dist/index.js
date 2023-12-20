@@ -16,6 +16,10 @@ const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const ws_1 = require("ws");
 const RedisClient_1 = __importDefault(require("./RedisClient"));
+const userColors = {
+    nextColor: 0,
+    colors: ['red', 'blue', 'green', 'yellow']
+};
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const wss = new ws_1.WebSocketServer({ server });
@@ -45,8 +49,10 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                 users[wsId] = {
                     room: roomId,
                     ws: ws,
-                    name: data.payload.name
+                    name: data.payload.name,
+                    color: userColors.colors[userColors.nextColor]
                 };
+                userColors.nextColor = (userColors.nextColor + 1) % (userColors.colors.length);
                 rooms[roomId] = {
                     roomName: data.payload.roomName
                 };
@@ -62,6 +68,7 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                 }
                 catch (e) {
                     delete users[wsId];
+                    userColors.nextColor = (userColors.nextColor == 0) ? (userColors.colors.length - 1) : (userColors.nextColor - 1);
                     delete rooms[roomId];
                     ws.send(JSON.stringify({
                         'type': 'roomCreationFailed',
@@ -102,8 +109,10 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                 users[wsId] = {
                     room: String(data.payload.roomId),
                     ws: ws,
-                    name: String(data.payload.name)
+                    name: String(data.payload.name),
+                    color: userColors.colors[userColors.nextColor]
                 };
+                userColors.nextColor = (userColors.nextColor + 1) % (userColors.colors.length);
                 try {
                     RedisClient_1.default.getInstance().subscribe(String(wsId), String(data.payload.roomId), ws);
                     ws.send(JSON.stringify({
@@ -116,6 +125,7 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                 }
                 catch (e) {
                     delete users[wsId];
+                    userColors.nextColor = (userColors.nextColor == 0) ? (userColors.colors.length - 1) : (userColors.nextColor - 1);
                     ws.send(JSON.stringify({
                         'type': 'roomJoinFailed',
                         'payload': {
@@ -137,9 +147,10 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
             else {
                 const roomId = users[wsId].room;
                 const name = users[wsId].name;
+                const color = users[wsId].color;
                 const message = String(data.payload.message);
                 try {
-                    RedisClient_1.default.getInstance().addChatMessage(roomId, name, message);
+                    RedisClient_1.default.getInstance().addChatMessage(roomId, name, color, message);
                     ws.send(JSON.stringify({
                         'type': 'messageSentSuccessfully',
                         'payload': {

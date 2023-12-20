@@ -28,7 +28,7 @@ export default class WSManager{
                 toast.error(data.payload.message);
             }
             else if(data.type=='message'){
-                setMessages(messages => [...messages, {name: data.payload.name, message: data.payload.message}]);
+                setMessages(messages => [...messages, {name: data.payload.name, color: data.payload.color, message: data.payload.message}]);
             }
         }
 
