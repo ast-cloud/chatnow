@@ -4,6 +4,7 @@ import { Button, Typography } from '@material-tailwind/react';
 import {useRecoilValue} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 import WSManager from "../lib/ws";
+import {motion} from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -70,10 +71,10 @@ export default function ChatPage(){
 
         <div id='chatDiv' className='flex-grow flex flex-col overflow-y-auto bg-[#EFEAE2]'>
             {messages.map((m, index)=>(
-                <div key={`message_${index}`} className={`flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg ${m.userId==userId?'self-end':''}`} style={{display:'inline-block'}}>
+                <motion.div initial={{scale: 0.6}} animate={{scale: 1, transition:{duration: 0.1}}} key={`message_${index}`} className={`flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg ${m.userId==userId?'self-end':''}`} style={{display:'inline-block'}}>
                     <p style={{fontSize:'14px', fontWeight:'bold', color: m.color, flexShrink:0}}>{m.name}</p>                                        
                     <p style={{fontSize:'16px', wordWrap:'break-word', whiteSpace:'pre-wrap', color:'#414142', flexShrink:0}}>{m.message}</p>                          
-                </div>
+                </motion.div>
             ))}
         </div>
 
