@@ -1,0 +1,6 @@
+#chatDiv {
+    background-image: url("./assets/chat-bg.png");
+    background-repeat: repeat;  /* Prevent image repetition */
+    background-size: auto;        /* Stretch image to cover the div */
+    background-position: center;   /* Center the image */
+  }
