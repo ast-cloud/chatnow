@@ -64,12 +64,16 @@ export default function ChatPage(){
     return <div className='flex flex-col justify-between h-screen'>
 
         <div className='w-full h-20 px-5 bg-[#F5F3F3] font-bold flex-shrink-0 flex flex-row justify-between items-center' style={{color:'#414142'}}>
-            <Typography placeholder='' variant='h5'>
-                {roomName} 
-            </Typography>
-            <Typography placeholder='' variant='h5' style={{color:'grey'}}>
-                Room ID : {roomId}
-            </Typography>
+            <motion.div initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1, transition:{duration: 0.2}}}>
+                <Typography placeholder='' variant='h5'>
+                    {roomName} 
+                </Typography>
+            </motion.div>
+            <motion.div initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1, transition:{duration: 0.2}}}>
+                <Typography placeholder='' variant='h5' style={{color:'grey'}}>
+                    Room ID : {roomId}
+                </Typography>
+            </motion.div>
         </div>
 
         <div id='chatDiv' className='flex-grow flex flex-col overflow-y-auto bg-[#EFEAE2]'>
