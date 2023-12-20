@@ -47,17 +47,20 @@ export default function ChatPage(){
     }
     
     async function handleSend(){
-        const data = await WSManager.getInstance().sendMessage(newMessage);
-        if(data['type']=='messageSentSuccessfully'){
-            console.log('Message sent succesfully');
-            setNewMessage('');
+        if(newMessage!==''){
             
-        }
-        else if(data['type']=='messageSendingFailed'){
-            toast.error(data['payload'].message);
+            const data = await WSManager.getInstance().sendMessage(newMessage);
+            if(data['type']=='messageSentSuccessfully'){
+                console.log('Message sent succesfully');
+                setNewMessage('');
+                
+            }
+            else if(data['type']=='messageSendingFailed'){
+                toast.error(data['payload'].message);
+            }
         }
     }
-
+        
     return <div className='flex flex-col justify-between h-screen'>
 
         <div className='w-full h-20 px-5 bg-[#F5F3F3] font-bold flex-shrink-0 flex flex-row justify-between items-center' style={{color:'#414142'}}>
