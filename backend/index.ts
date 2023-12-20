@@ -150,8 +150,9 @@ wss.on('connection', async (ws, req)=>{
                 const name = users[wsId].name;
                 const color = users[wsId].color;
                 const message = String(data.payload.message);
+                const userId = wsId;
                 try{
-                    RedisSubscriptionManager.getInstance().addChatMessage(roomId, name, color, message);
+                    RedisSubscriptionManager.getInstance().addChatMessage(roomId, name, userId, color, message);
                     ws.send(JSON.stringify({
                         'type': 'messageSentSuccessfully',
                         'payload':{

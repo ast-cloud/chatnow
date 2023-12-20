@@ -8,8 +8,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type chatPageData = {
-    url: string;
     roomId: string;
+    roomName: string;
+    userId: string;
 };
 export default function Landing(){
 

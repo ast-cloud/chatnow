@@ -15,11 +15,11 @@ export default class WSManager{
             const data = JSON.parse(event.data);
             if(data.type=='roomCreated'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName});
+                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName, userId: data.payload.userId});
             }
             else if(data.type=='roomJoined'){
                 toast.success('Room ID : '+ String(data.payload.roomId));
-                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName});
+                setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName, userId: data.payload.userId});
             }
             else if(data.type=='roomCreationFailed'){
                 toast.error(data.payload.message);
@@ -28,7 +28,7 @@ export default class WSManager{
                 toast.error(data.payload.message);
             }
             else if(data.type=='message'){
-                setMessages(messages => [...messages, {name: data.payload.name, color: data.payload.color, message: data.payload.message}]);
+                setMessages(messages => [...messages, {name: data.payload.name, userId: data.payload.userId, color: data.payload.color, message: data.payload.message}]);
             }
         }
 

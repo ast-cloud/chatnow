@@ -17,7 +17,7 @@ export default function ChatPage(){
     const messages = useRecoilValue(chatMessages);
 
     const {state} = useLocation();
-    const {roomId, roomName} = state;
+    const {roomId, roomName, userId} = state;
     
     useEffect(() => {
         console.log('messages - ', messages);
@@ -63,9 +63,9 @@ export default function ChatPage(){
             </Typography>
         </div>
 
-        <div id='chatDiv' className='flex-grow overflow-y-auto bg-[#EFEAE2]'>
+        <div id='chatDiv' className='flex-grow flex flex-col overflow-y-auto bg-[#EFEAE2]'>
             {messages.map((m, index)=>(
-                <div key={`message_${index}`} className='flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg'>
+                <div key={`message_${index}`} className={`flex flex-col bg-white m-4 p-2 pl-4 max-w-[50vw] rounded-lg ${m.userId==userId?'self-end':''}`} style={{}}>
                     <p style={{fontSize:'14px', fontWeight:'bold', color: m.color}}>{m.name}</p>                                        
                     <p style={{fontSize:'16px', wordWrap:'break-word', whiteSpace:'pre-wrap', color:'#414142'}}>{m.message}</p>                          
                 </div>

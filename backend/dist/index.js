@@ -62,7 +62,8 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                         'type': 'roomCreated',
                         'payload': {
                             'roomId': roomId,
-                            'roomName': rooms[roomId].roomName
+                            'roomName': rooms[roomId].roomName,
+                            'userId': wsId
                         }
                     }));
                 }
@@ -119,7 +120,8 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                         'type': 'roomJoined',
                         'payload': {
                             'roomId': String(data.payload.roomId),
-                            'roomName': rooms[data.payload.roomId].roomName
+                            'roomName': rooms[data.payload.roomId].roomName,
+                            'userId': wsId
                         }
                     }));
                 }
@@ -149,8 +151,9 @@ wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* ()
                 const name = users[wsId].name;
                 const color = users[wsId].color;
                 const message = String(data.payload.message);
+                const userId = wsId;
                 try {
-                    RedisClient_1.default.getInstance().addChatMessage(roomId, name, color, message);
+                    RedisClient_1.default.getInstance().addChatMessage(roomId, name, userId, color, message);
                     ws.send(JSON.stringify({
                         'type': 'messageSentSuccessfully',
                         'payload': {
