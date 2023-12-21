@@ -9,7 +9,7 @@ export default class WSManager{
     
     private constructor(setChatRouteData, setMessages){
         
-        this.websocket = new WebSocket('ws://localhost:3000');
+        this.websocket = new WebSocket('ws://3.7.57.93:3000');
 
         this.websocket.onmessage = (event)=>{
             const data = JSON.parse(event.data);
