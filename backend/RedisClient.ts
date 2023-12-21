@@ -9,8 +9,20 @@ export default class RedisSubscriptionManager{
     private reverseSubscriptions: Map<string, { [userId:string] : {userId:string, ws:any}}>;
 
     private constructor(){
-        this.subscriber = createClient();
-        this.publisher = createClient();
+        this.subscriber = createClient({
+            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+            socket: {
+                host: `${process.env.REDIS_INSTANCE_URL}`,
+                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+            }
+        });
+        this.publisher = createClient({
+            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+            socket: {
+                host: `${process.env.REDIS_INSTANCE_URL}`,
+                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+            }
+        });
         this.publisher.connect();
         this.subscriber.connect();
         this.subscriptions = new Map<string, string>();
