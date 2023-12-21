@@ -26,6 +26,8 @@ const rooms : {[roomId : string] : {roomName: string}} = {};
 
 wss.on('connection', async (ws, req)=>{
 
+    console.log('New ws connection established.');
+
     const wsId = String(count++);
     
     ws.on('message', (message)=>{
