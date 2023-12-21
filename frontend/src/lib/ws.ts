@@ -44,6 +44,10 @@ export default class WSManager{
         }
         return this.instance;
     }
+    
+    static doesInstanceExist(){
+        return !!this.instance;
+    }
 
     sendData(data: string){
         this.websocket.send(data);
