@@ -33,7 +33,7 @@ export default function ChatPage(){
     }, [messages]);
 
     useEffect(()=>{
-        if((WSManager.getInstance().getState()==2)||(WSManager.getInstance().getState()==3)){
+        if(!WSManager.doesInstanceExist()){
             navigate('..');
         }
         return ()=>{
