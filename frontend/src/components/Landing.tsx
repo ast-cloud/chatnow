@@ -29,9 +29,9 @@ export default function Landing(){
     }
 
     return (
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh', border:'1px solid black'}}>
+        <div style={{display:'flex', justifyContent:'space-evenly', alignItems:'center', height:'100vh', width:'100vw', border:'1px solid black'}}>
             <Button placeholder='' size="lg" onClick={createRoom}>Create a room</Button>
-            <div style={{width:'100px'}}></div>
+            {/* <div style={{width:'100px'}}></div> */}
             <Button placeholder='' size="lg" onClick={joinRoom}>Join a room</Button>
             <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
         </div>
