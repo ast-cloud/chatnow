@@ -25,7 +25,6 @@ export default function ChatPage(){
     useEffect(() => {
         console.log('messages - ', messages);
         const scrollableDiv = document.getElementById('chatDiv');
-        // scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
         scrollableDiv.scrollTo({
             top: scrollableDiv.scrollHeight,
             behavior: 'smooth'
