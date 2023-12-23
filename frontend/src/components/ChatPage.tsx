@@ -33,7 +33,7 @@ export default function ChatPage(){
 
     useEffect(()=>{
         if(!WSManager.doesInstanceExist()){
-            navigate('..');
+            navigate('/');
         }
         return ()=>{
             console.log('Closing ws connection.')

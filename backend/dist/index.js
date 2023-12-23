@@ -26,7 +26,6 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const wss = new ws_1.WebSocketServer({ server });
 app.get('/healthcheck', (req, res) => {
-    console.log('Testing port - ', String(process.env.REDIS_INSTANCE_PORT));
     res.json({ 'status': 'healthy' });
 });
 let count = 0;
