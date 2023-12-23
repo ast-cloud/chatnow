@@ -12,8 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = require("redis");
 class RedisSubscriptionManager {
     constructor() {
-        this.subscriber = (0, redis_1.createClient)();
-        this.publisher = (0, redis_1.createClient)();
+        this.subscriber = (0, redis_1.createClient)({
+            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+            socket: {
+                host: `${process.env.REDIS_INSTANCE_URL}`,
+                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+            }
+        });
+        this.publisher = (0, redis_1.createClient)({
+            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+            socket: {
+                host: `${process.env.REDIS_INSTANCE_URL}`,
+                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+            }
+        });
         this.publisher.connect();
         this.subscriber.connect();
         this.subscriptions = new Map();
