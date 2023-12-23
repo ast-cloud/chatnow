@@ -6,10 +6,27 @@ export default class WSManager{
     
     public static instance: WSManager;
     private websocket: WebSocket;
-    
+    private regularPing: any;
     private constructor(setChatRouteData, setMessages){
         
         this.websocket = new WebSocket('wss://chatnow.aastikyadav.com');
+
+        this.websocket.onopen = (event)=>{
+            console.log('Websocket connection opened : ', event);
+
+            const pingMessage = JSON.stringify({ ping: 1 });
+            this.websocket.send(pingMessage);
+
+            this.regularPing = setInterval(()=>{
+                this.websocket.send(pingMessage);
+            }, 120000);
+
+        }
+
+        this.websocket.onclose = (event)=>{
+            console.log('Websocket connection closed : ', event);
+            clearInterval(this.regularPing);
+        }
 
         this.websocket.onmessage = (event)=>{
             const data = JSON.parse(event.data);
