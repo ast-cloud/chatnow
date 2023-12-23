@@ -18,7 +18,7 @@ export default function ChatPage(){
     const messages = useRecoilValue(chatMessages);
 
     const {state} = useLocation();
-    const {roomId, roomName, userId} = state;
+    const {roomId, roomName, userId} = state || {roomId: '', roomName: '', userId: ''};
 
     const navigate = useNavigate();
     
