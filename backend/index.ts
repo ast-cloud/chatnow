@@ -2,6 +2,9 @@ import express from 'express';
 import http from 'http';
 import {WebSocketServer} from 'ws';
 import RedisSubscriptionManager from './RedisClient';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const userColors = {
     nextColor : 0,

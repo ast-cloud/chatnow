@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const ws_1 = require("ws");
 const RedisClient_1 = __importDefault(require("./RedisClient"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const userColors = {
     nextColor: 0,
     colors: ['violet', 'lightblue', 'lightgreen', 'orange']
@@ -24,12 +26,14 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const wss = new ws_1.WebSocketServer({ server });
 app.get('/healthcheck', (req, res) => {
+    console.log('Testing port - ', String(process.env.REDIS_INSTANCE_PORT));
     res.json({ 'status': 'healthy' });
 });
 let count = 0;
 const users = {};
 const rooms = {};
 wss.on('connection', (ws, req) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('New ws connection established.');
     const wsId = String(count++);
     ws.on('message', (message) => {
         console.log('Received message - ', String(message));
