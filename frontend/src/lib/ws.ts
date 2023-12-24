@@ -18,8 +18,9 @@ export default class WSManager{
             this.websocket.send(pingMessage);
 
             this.regularPing = setInterval(()=>{
+                console.log('About to ping');
                 this.websocket.send(pingMessage);
-            }, 120000);
+            }, 10000);
 
         }
 
