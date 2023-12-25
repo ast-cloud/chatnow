@@ -4,3 +4,38 @@
     background-size: auto;        /* Stretch image to cover the div */
     background-position: center;   /* Center the image */
   }
+
+  .floating-animation{
+
+    width: 80%;
+    border: 0px solid black;
+    > div {
+      position: unset !important;
+    }
+  
+    .floating-animation-item{
+      /* object-fit: contain;
+      width: 100% !important; */
+      position: relative !important;
+      /* height: unset !important; */
+      animation: up-down 2s ease-in-out infinite alternate-reverse both;
+    }
+}
+
+@-webkit-keyframes up-down{
+    0%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(10px);
+    }
+}
+  
+@keyframes up-down{
+    0%{
+        transform: translateY(-8px);
+    }
+    100%{
+        transform: translateY(8px);
+    }
+}
