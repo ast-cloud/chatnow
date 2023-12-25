@@ -36,47 +36,8 @@ export default function Landing(){
     return (
         <div style={{display:'flex', flexDirection:isSmallScreen?'column':'row', alignItems:isSmallScreen?'center':'', height:'100vh'}}>
 
-            <div style={{display:'flex', flexDirection:'column', width:'50vw', backgroundColor:''}}>
+            {isSmallScreen?<SmallScreenLayout/>:<BigScreenLayout/>}
 
-                <LogoWithName/>
-
-                <Features/>
-
-                <CreateJoinButtons/>
-                
-            </div>
-
-            <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'50vw', backgroundColor:''}}>
-
-                <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:450, width:450}}/>
-                
-            </div>
-
-            {/* <div style={{display:'flex', flexDirection: isSmallScreen?'column':'row'}}>
-                <div style={{display:'flex', height:'40vh', width:'50vw', border:'0px solid black'}}>
-                    <div style={{height:'100px', width:'100px', marginTop:'7vh', marginLeft:'25vh'}}>
-                        <img src="/chatnow_logo.png" alt=""/>
-                    </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <h1 style={{fontSize:'50px', fontFamily:"cursive", fontWeight:'bold', color: '#05e3c5', marginTop:'7vh'}}>Chatnow</h1>
-                </div>
-                <div style={{display:'flex', width:'50vw', paddingLeft:'55px', paddingTop:'85px', alignItems:'center', border:'0px solid red'}}>
-                    <div>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Quick, anonymous chatting application</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Hidden identity</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Encrypted</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>No logs</p>
-
-                    </div>
-                </div>
-            </div>
-            <div style={{display:'flex'}}>
-                <div style={{display:'flex', justifyContent:'space-evenly', alignItems:'center', height:'60vh', width:'50vw', border:'0px solid black'}}>
-                    <Button placeholder='' size="lg" onClick={createRoom}>Create a room</Button>
-                    <Button placeholder='' size="lg" onClick={joinRoom}>Join a room</Button>
-                    <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
-                </div>
-            </div> */}
         </div>
     );
 }
@@ -160,9 +121,9 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     );
 }
 
-function LogoWithName(){
+function LogoWithName({paddingleft, divHeight}){
     return (
-        <div style={{display:'flex', alignItems:'center', height:'35vh', paddingLeft:'15%', border:'0px solid black'}}>
+        <div style={{display:'flex', alignItems:'center', height: divHeight, paddingLeft: paddingleft, border:'0px solid black'}}>
             <div className="floating-animation" style={{height:'100px', width:'100px'}}>
                 <img src="/chatnow_logo.png" className="floating-animation-item" alt=""/>
             </div>
@@ -172,9 +133,9 @@ function LogoWithName(){
     );
 }
 
-function Features(){
+function Features({isSmallScreen}){
     return (
-        <div style={{display:'flex', flexDirection:'column', height:'25vh', justifyContent:'center', paddingLeft:'20%', border:'0px solid green'}}>
+        <div style={{display:'flex', flexDirection:'column', height:'25vh', justifyContent:'center', paddingLeft:isSmallScreen?'0%':'20%', border:'0px solid green'}}>
                     
                 <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Quick, anonymous chatting application</p>
                 <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Hidden identity</p>
@@ -206,6 +167,46 @@ function CreateJoinButtons(){
             <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={createRoom}>Create a room</Button>
             <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={joinRoom}>Join a room</Button>
             <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
+        </div>
+    );
+}
+
+function BigScreenLayout(){
+    
+    return (
+        <>
+            <div style={{display:'flex', flexDirection:'column', width:'50vw', backgroundColor:''}}>
+
+                <LogoWithName paddingleft='15%' divHeight='35vh'/>
+
+                <Features isSmallScreen={false}/>
+
+                <CreateJoinButtons/>
+
+            </div>
+
+            <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'50vw', backgroundColor:''}}>
+
+                <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:450, width:450}}/>
+
+            </div>    
+        </>
+    );
+}
+
+function SmallScreenLayout(){
+
+    return (
+        <div style={{display:'flex', flexDirection:'column'}}>
+
+            <LogoWithName paddingleft='' divHeight='15vh'/>
+
+            <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:250, width:250, alignSelf:'center'}}/>
+
+            <Features isSmallScreen={true}/>
+            
+            <CreateJoinButtons/>            
+
         </div>
     );
 }
