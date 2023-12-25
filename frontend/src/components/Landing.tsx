@@ -5,7 +5,7 @@ import WSManager from "../lib/ws";
 import {useSetRecoilState} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 import Lottie from 'react-lottie-player';
-import homePageAnimation from '../../public/home_page_animation.json';
+import homePageAnimation from '../assets/home_page_animation.json';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,8 +17,7 @@ type chatPageData = {
 export default function Landing(){
 
 
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [createOrJoin, setCreateOrJoin] = useState('create');
+    
 
     const [isSmallScreen, setIsSmallScreen] = useState(false);
 
@@ -32,52 +31,25 @@ export default function Landing(){
         return () => window.removeEventListener('resize', handleResize);
       }, []);
 
-    function createRoom(){
-        setCreateOrJoin('create');
-        setDialogOpen(!dialogOpen);
-    }
     
-    function joinRoom(){
-        setCreateOrJoin('join');
-        setDialogOpen(!dialogOpen);
-    }
 
     return (
-        <div style={{display:'flex', flexDirection:isSmallScreen?'column':'row', height:'100vh'}}>
+        <div style={{display:'flex', flexDirection:isSmallScreen?'column':'row', alignItems:isSmallScreen?'center':'', height:'100vh'}}>
 
             <div style={{display:'flex', flexDirection:'column', width:'50vw', backgroundColor:''}}>
 
-                <div style={{display:'flex', alignItems:'center', height:'35vh', paddingLeft:'15%', border:'0px solid black'}}>
-                    <div className="floating-animation" style={{height:'100px', width:'100px'}}>
-                        <img src="/chatnow_logo.png" className="floating-animation-item" alt=""/>
-                    </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <h1 style={{fontSize:'50px', fontFamily:"cursive", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
-                </div>
+                <LogoWithName/>
 
-                <div style={{display:'flex', flexDirection:'column', height:'25vh', justifyContent:'center', paddingLeft:'20%', border:'0px solid green'}}>
-                    
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Quick, anonymous chatting application</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Hidden identity</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Encrypted</p>
-                        <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>No logs</p>
+                <Features/>
 
-                    
-                </div>
-
-                
-                <div style={{display:'flex', height:'40vh', justifyContent:'space-around', paddingTop:'15%', border:'0px solid yellow'}}>
-                    <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={createRoom}>Create a room</Button>
-                    <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={joinRoom}>Join a room</Button>
-                    <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
-                </div>
-                
-
+                <CreateJoinButtons/>
                 
             </div>
 
             <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'50vw', backgroundColor:''}}>
+
                 <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:450, width:450}}/>
+                
             </div>
 
             {/* <div style={{display:'flex', flexDirection: isSmallScreen?'column':'row'}}>
@@ -185,5 +157,55 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             <ToastContainer/>
             </Dialog>
       </>
+    );
+}
+
+function LogoWithName(){
+    return (
+        <div style={{display:'flex', alignItems:'center', height:'35vh', paddingLeft:'15%', border:'0px solid black'}}>
+            <div className="floating-animation" style={{height:'100px', width:'100px'}}>
+                <img src="/chatnow_logo.png" className="floating-animation-item" alt=""/>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <h1 style={{fontSize:'50px', fontFamily:"cursive", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
+        </div>
+    );
+}
+
+function Features(){
+    return (
+        <div style={{display:'flex', flexDirection:'column', height:'25vh', justifyContent:'center', paddingLeft:'20%', border:'0px solid green'}}>
+                    
+                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Quick, anonymous chatting application</p>
+                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Hidden identity</p>
+                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Encrypted</p>
+                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>No logs</p>
+
+            
+        </div>
+    );
+}
+
+function CreateJoinButtons(){
+
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const [createOrJoin, setCreateOrJoin] = useState('create');
+
+    function createRoom(){
+        setCreateOrJoin('create');
+        setDialogOpen(!dialogOpen);
+    }
+    
+    function joinRoom(){
+        setCreateOrJoin('join');
+        setDialogOpen(!dialogOpen);
+    }
+
+    return (
+        <div style={{display:'flex', height:'40vh', justifyContent:'space-around', paddingTop:'15%', border:'0px solid yellow'}}>
+            <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={createRoom}>Create a room</Button>
+            <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={joinRoom}>Join a room</Button>
+            <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
+        </div>
     );
 }
