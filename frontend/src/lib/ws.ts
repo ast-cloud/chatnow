@@ -32,11 +32,12 @@ export default class WSManager{
         this.websocket.onmessage = (event)=>{
             const data = JSON.parse(event.data);
             if(data.type=='roomCreated'){
+                console.log('setChatRouteData inside onmessage handler - ', setChatRouteData);
                 toast.success('Room ID : '+ String(data.payload.roomId));
                 setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName, userId: data.payload.userId});
             }
             else if(data.type=='roomJoined'){
-                toast.success('Room ID : '+ String(data.payload.roomId));
+                toast.success('Room joined : '+ String(data.payload.roomId));
                 setChatRouteData({roomId: data.payload.roomId, roomName: data.payload.roomName, userId: data.payload.userId});
             }
             else if(data.type=='roomCreationFailed'){

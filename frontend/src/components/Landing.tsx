@@ -30,7 +30,7 @@ export default function Landing(){
         window.addEventListener('resize', handleResize);
         handleResize();
     
-        return () => window.removeEventListener('resize', handleResize);
+        return () => {console.log('Landing cleanup called'); window.removeEventListener('resize', handleResize);}
       }, []);
 
     
@@ -72,9 +72,11 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     const navigate = useNavigate();
 
     useEffect(function(){
+        console.log('Inside useeffect, chatRouteData modified to - ', chatRouteData);
         if(chatRouteData){
             navigate('/chat', {state: chatRouteData});
         }
+        return ()=>{console.log('Cleanup called')};
     }, [chatRouteData]);
     
 
@@ -89,6 +91,7 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             }));
         }
         else{
+            console.log('Joining room ', roomId);
             WSManager.getInstance().sendData(JSON.stringify({
                 type: "join",
                 payload:{
@@ -185,6 +188,8 @@ function CreateJoinButtons({divHeight, paddingtop}){
 }
 
 function BigScreenLayout(){
+
+    console.log('Big screen layout rendering');
     
     return (
         <div style={{display:'flex', flexDirection:'row', height:'100vh'}}>
@@ -208,6 +213,8 @@ function BigScreenLayout(){
 }
 
 function MediumScreenLayout(){
+
+    console.log('Medium screen layout rendering');
 
     return (
         <div style={{display:'flex', flexDirection:'column'}}>
@@ -236,6 +243,8 @@ function MediumScreenLayout(){
 }
 
 function SmallScreenLayout(){
+
+    console.log('Small screen layout rendering');
 
     return (
         <div style={{display:'flex', flexDirection:'column'}}>
