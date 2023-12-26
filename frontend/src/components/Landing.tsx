@@ -17,23 +17,6 @@ type chatPageData = {
 };
 export default function Landing(){
 
-
-    
-
-    // const [isScreenLTE600, setIsScreenLTE600] = useState(false);
-    // const [isScreenB600A800, setIsScreenB600A800] = useState(false);
-
-    useEffect(() => {
-        // const handleResize = () => {
-        //   setIsScreenLTE600(window.innerWidth <= 600);
-        //   setIsScreenB600A800( (window.innerWidth > 600) && (window.innerWidth < 800) );
-        // };
-        // window.addEventListener('resize', handleResize);
-        // handleResize();
-    
-        // return () => {console.log('Landing cleanup called'); window.removeEventListener('resize', handleResize);}
-      }, []);
-
     var isScreenLTE600 = useMediaQuery({query: '(max-width: 600px)'});
     var isScreenLTE800 = useMediaQuery({query: '(max-width: 800px)'});
 
@@ -47,15 +30,6 @@ export default function Landing(){
         return <BigScreenLayout/>
     }  
 
-    // return (
-    //     <div style={{display:'flex', flexDirection:isScreenLTE600?'column':'row', alignItems:isScreenLTE600?'center':'', height:'100vh'}}>
-            
-    //         {!isScreenLTE600 && !isScreenB600A800 && <BigScreenLayout/>}
-    //         {isScreenLTE600 && <SmallScreenLayout/>}
-    //         {isScreenB600A800 && <MediumScreenLayout/>}
-
-    //     </div>
-    // );
 }
 
 function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
