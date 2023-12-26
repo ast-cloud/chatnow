@@ -2,6 +2,8 @@ An online quick chat application created in react using Redis pub/sub system. Us
 
 It comprises of a React frontend and an Express backend.
 
+Redis is used for Pub/Sub system.
+
 React state management library used - Recoil
 
 Typescript is used as the primary language.
