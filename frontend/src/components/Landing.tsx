@@ -121,7 +121,7 @@ function LogoWithName({paddingleft, divHeight, imageHeight, imageWidth}){
                 <img src="/chatnow_logo.png" className="floating-animation-item" alt="" style={{height:imageHeight, width:imageWidth}} height='100px' width='100px'/>
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <h1 style={{fontSize:'50px', fontFamily:"cursive", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
+            <h1 style={{fontSize:'55px', fontFamily:"Comic Neue", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
         </div>
     );
 }
@@ -130,10 +130,10 @@ function Features({isSmallScreen}){
     return (
         <div style={{display:'flex', flexDirection:'column', height:'25vh', justifyContent:'center', paddingLeft:isSmallScreen?'0%':'20%', border:'0px solid green'}}>
                     
-                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Quick, anonymous chatting application</p>
-                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Hidden identity</p>
-                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>Encrypted</p>
-                <p style={{fontSize:'20px', fontFamily:'cursive', fontWeight:'bold'}}>No logs</p>
+                <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bolder'}}>Quick, anonymous chatting application</p>
+                <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bold'}}>Hidden identity</p>
+                <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bold'}}>Encrypted</p>
+                <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bold'}}>No logs</p>
 
             
         </div>
