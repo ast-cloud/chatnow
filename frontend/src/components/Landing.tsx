@@ -19,11 +19,13 @@ export default function Landing(){
 
     
 
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const [isScreenLTE600, setIsScreenLTE600] = useState(false);
+    const [isScreenB600A800, setIsScreenB600A800] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-          setIsSmallScreen(window.innerWidth < 600);
+          setIsScreenLTE600(window.innerWidth <= 600);
+          setIsScreenB600A800( (window.innerWidth > 600) && (window.innerWidth < 800) );
         };
         window.addEventListener('resize', handleResize);
         handleResize();
@@ -32,14 +34,25 @@ export default function Landing(){
       }, []);
 
     
+    if(!isScreenLTE600 && !isScreenB600A800){
+        return <BigScreenLayout/>
+    }
+    else if(isScreenB600A800){
+        return <MediumScreenLayout/>
+    }
+    else{
+        return <SmallScreenLayout/>
+    }  
 
-    return (
-        <div style={{display:'flex', flexDirection:isSmallScreen?'column':'row', alignItems:isSmallScreen?'center':'', height:'100vh'}}>
+    // return (
+    //     <div style={{display:'flex', flexDirection:isScreenLTE600?'column':'row', alignItems:isScreenLTE600?'center':'', height:'100vh'}}>
+            
+    //         {!isScreenLTE600 && !isScreenB600A800 && <BigScreenLayout/>}
+    //         {isScreenLTE600 && <SmallScreenLayout/>}
+    //         {isScreenB600A800 && <MediumScreenLayout/>}
 
-            {isSmallScreen?<SmallScreenLayout/>:<BigScreenLayout/>}
-
-        </div>
-    );
+    //     </div>
+    // );
 }
 
 function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
@@ -121,11 +134,11 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
     );
 }
 
-function LogoWithName({paddingleft, divHeight}){
+function LogoWithName({paddingleft, divHeight, imageHeight, imageWidth}){
     return (
         <div style={{display:'flex', alignItems:'center', height: divHeight, paddingLeft: paddingleft, border:'0px solid black'}}>
-            <div className="floating-animation" style={{height:'100px', width:'100px'}}>
-                <img src="/chatnow_logo.png" className="floating-animation-item" alt=""/>
+            <div className="floating-animation" style={{height:imageHeight, width:imageWidth}}>
+                <img src="/chatnow_logo.png" className="floating-animation-item" alt="" style={{height:imageHeight, width:imageWidth}} height='100px' width='100px'/>
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <h1 style={{fontSize:'50px', fontFamily:"cursive", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
@@ -147,7 +160,7 @@ function Features({isSmallScreen}){
     );
 }
 
-function CreateJoinButtons(){
+function CreateJoinButtons({divHeight, paddingtop}){
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [createOrJoin, setCreateOrJoin] = useState('create');
@@ -163,7 +176,7 @@ function CreateJoinButtons(){
     }
 
     return (
-        <div style={{display:'flex', height:'40vh', justifyContent:'space-around', paddingTop:'15%', border:'0px solid yellow'}}>
+        <div style={{display:'flex', height: divHeight, justifyContent:'space-around', paddingTop: paddingtop, border:'0px solid yellow'}}>
             <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={createRoom}>Create a room</Button>
             <Button placeholder='' size="lg" style={{height:'45px', borderRadius:'40px'}} onClick={joinRoom}>Join a room</Button>
             <DialogWithForm dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} createOrJoin={createOrJoin}/>
@@ -174,14 +187,14 @@ function CreateJoinButtons(){
 function BigScreenLayout(){
     
     return (
-        <>
+        <div style={{display:'flex', flexDirection:'row', height:'100vh'}}>
             <div style={{display:'flex', flexDirection:'column', width:'50vw', backgroundColor:''}}>
 
-                <LogoWithName paddingleft='15%' divHeight='35vh'/>
+                <LogoWithName paddingleft='15%' divHeight='35vh' imageHeight='100px' imageWidth='100px'/>
 
                 <Features isSmallScreen={false}/>
 
-                <CreateJoinButtons/>
+                <CreateJoinButtons divHeight='40vh' paddingtop='15%'/>
 
             </div>
 
@@ -190,7 +203,35 @@ function BigScreenLayout(){
                 <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:450, width:450}}/>
 
             </div>    
-        </>
+        </div>
+    );
+}
+
+function MediumScreenLayout(){
+
+    return (
+        <div style={{display:'flex', flexDirection:'column'}}>
+
+            <div style={{display:'flex', justifyContent:'center'}}>
+                <LogoWithName paddingleft='0%' divHeight='20vh' imageHeight='80px' imageWidth='80px'/>
+            </div>
+
+            <div style={{display:'flex', border:'0px solid blue'}}>
+                <div style={{width:'45vw', backgroundColor:'', alignSelf:'center'}}>
+                    <Features isSmallScreen={false}/>
+                </div>
+                <div style={{display:'flex', justifyContent:'center', width:'55vw'}}>
+                    <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:350, width:350}}/>              
+                </div>                
+            </div>
+            
+            {/* <div style={{width:'100vw'}}> */}
+                <CreateJoinButtons divHeight='35vh' paddingtop='8%'/>
+            {/* </div> */}
+
+            
+
+        </div>
     );
 }
 
@@ -199,13 +240,17 @@ function SmallScreenLayout(){
     return (
         <div style={{display:'flex', flexDirection:'column'}}>
 
-            <LogoWithName paddingleft='' divHeight='15vh'/>
+            <div style={{display:'flex', justifyContent:'center'}}>
+                <LogoWithName paddingleft='0%' divHeight='20vh' imageHeight='65px' imageWidth='65px'/>
+            </div>
 
             <Lottie loop animationData={homePageAnimation} play speed={2.0} style={{height:250, width:250, alignSelf:'center'}}/>
 
-            <Features isSmallScreen={true}/>
+            <div style={{display:'flex', justifyContent:'center'}}>
+                <Features isSmallScreen={true}/>
+            </div>
             
-            <CreateJoinButtons/>            
+            <CreateJoinButtons divHeight='25vh' paddingtop='5%'/>            
 
         </div>
     );
