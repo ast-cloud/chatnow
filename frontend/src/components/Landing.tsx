@@ -6,6 +6,7 @@ import {useSetRecoilState} from 'recoil';
 import { chatMessages } from '../lib/atoms/chatPage';
 import Lottie from 'react-lottie-player';
 import homePageAnimation from '../assets/home_page_animation.json';
+import {useMediaQuery} from 'react-responsive';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,29 +20,31 @@ export default function Landing(){
 
     
 
-    const [isScreenLTE600, setIsScreenLTE600] = useState(false);
-    const [isScreenB600A800, setIsScreenB600A800] = useState(false);
+    // const [isScreenLTE600, setIsScreenLTE600] = useState(false);
+    // const [isScreenB600A800, setIsScreenB600A800] = useState(false);
 
     useEffect(() => {
-        const handleResize = () => {
-          setIsScreenLTE600(window.innerWidth <= 600);
-          setIsScreenB600A800( (window.innerWidth > 600) && (window.innerWidth < 800) );
-        };
-        window.addEventListener('resize', handleResize);
-        handleResize();
+        // const handleResize = () => {
+        //   setIsScreenLTE600(window.innerWidth <= 600);
+        //   setIsScreenB600A800( (window.innerWidth > 600) && (window.innerWidth < 800) );
+        // };
+        // window.addEventListener('resize', handleResize);
+        // handleResize();
     
-        return () => {console.log('Landing cleanup called'); window.removeEventListener('resize', handleResize);}
+        // return () => {console.log('Landing cleanup called'); window.removeEventListener('resize', handleResize);}
       }, []);
 
-    
-    if(!isScreenLTE600 && !isScreenB600A800){
-        return <BigScreenLayout/>
+    var isScreenLTE600 = useMediaQuery({query: '(max-width: 600px)'});
+    var isScreenLTE800 = useMediaQuery({query: '(max-width: 800px)'});
+
+    if(isScreenLTE600){
+        return <SmallScreenLayout/>
     }
-    else if(isScreenB600A800){
+    else if(!isScreenLTE600 && isScreenLTE800){
         return <MediumScreenLayout/>
     }
     else{
-        return <SmallScreenLayout/>
+        return <BigScreenLayout/>
     }  
 
     // return (
