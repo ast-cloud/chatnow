@@ -1,8 +1,8 @@
-An online quick chat application created in react using Redis pub/sub system. Users can create a room or join an already created room with any name, without the need to give any personal information (Email or phone number). After the web-socket connection ends the room is completely disposed.
+An online quick chat application created in react using Redis pub/sub system. Users can create a chat room or join an existing chat room with any name, without the need to give any personal information (Email or phone number). After the web-socket connection ends the room is completely disposed.
 
 It comprises of a React frontend and an Express backend.
 
-Redis is used for Pub/Sub system.
+For each chat room, a channel is created in the Redis Pub/Sub system to which all the room members are made to subscribe. Any new message from a member is published to this channel and hence received by all other members.
 
 React state management library used - Recoil
 
