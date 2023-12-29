@@ -209,9 +209,7 @@ function MediumScreenLayout(){
                 </div>                
             </div>
             
-            {/* <div style={{width:'100vw'}}> */}
                 <CreateJoinButtons divHeight='35vh' paddingtop='8%'/>
-            {/* </div> */}
 
             
 
