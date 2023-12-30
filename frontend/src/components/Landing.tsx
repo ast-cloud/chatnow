@@ -68,7 +68,6 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
             }));
         }
         else{
-            console.log('Joining room ', roomId);
             WSManager.getInstance().sendData(JSON.stringify({
                 type: "join",
                 payload:{
