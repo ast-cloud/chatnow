@@ -7,6 +7,7 @@ import { chatMessages } from '../lib/atoms/chatPage';
 import Lottie from 'react-lottie-player';
 import homePageAnimation from '../assets/home_page_animation.json';
 import {useMediaQuery} from 'react-responsive';
+import {motion} from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -115,13 +116,13 @@ function DialogWithForm({dialogOpen, setDialogOpen, createOrJoin}){
 
 function LogoWithName({paddingleft, divHeight, imageHeight, imageWidth}){
     return (
-        <div style={{display:'flex', alignItems:'center', height: divHeight, paddingLeft: paddingleft, border:'0px solid black'}}>
+        <motion.div initial={{scale: 0.8, y: 20, opacity: 0}} animate={{scale: 1.0, y: 0, opacity: 1, transition: {duration: 1}}} style={{display:'flex', alignItems:'center', height: divHeight, paddingLeft: paddingleft, border:'0px solid black'}}>
             <div className="floating-animation" style={{height:imageHeight, width:imageWidth}}>
                 <img src="/chatnow_logo.png" className="floating-animation-item" alt="" style={{height:imageHeight, width:imageWidth}} height='100px' width='100px'/>
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <h1 style={{fontSize:'55px', fontFamily:"Comic Neue", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
-        </div>
+        </motion.div>
     );
 }
 
