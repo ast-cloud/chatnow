@@ -120,7 +120,7 @@ function LogoWithName({paddingleft, divHeight, imageHeight, imageWidth}){
             <div className="floating-animation" style={{height:imageHeight, width:imageWidth}}>
                 <img src="/chatnow_logo.png" className="floating-animation-item" alt="" style={{height:imageHeight, width:imageWidth}} height='100px' width='100px'/>
             </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <h1 style={{fontSize:'55px', fontFamily:"Comic Neue", fontWeight:'bold', color: '#05e3c5'}}>Chatnow</h1>
         </motion.div>
     );
