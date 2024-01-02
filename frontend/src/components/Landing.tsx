@@ -135,7 +135,6 @@ function Features({isSmallScreen}){
                 <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bold'}}>Encrypted</p>
                 <p style={{fontSize:'25px', fontFamily:'Comic Neue', fontWeight:'bold'}}>No logs</p>
 
-            
         </div>
     );
 }
@@ -210,8 +209,6 @@ function MediumScreenLayout(){
             </div>
             
                 <CreateJoinButtons divHeight='35vh' paddingtop='8%'/>
-
-            
 
         </div>
     );
