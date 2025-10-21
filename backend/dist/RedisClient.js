@@ -8,29 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
 Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = require("redis");
 class RedisSubscriptionManager {
     constructor() {
-        this.subscriber = (0, redis_1.createClient)({
-            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
-            socket: {
-                host: `${process.env.REDIS_INSTANCE_URL}`,
-                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
-            }
-        });
-        this.publisher = (0, redis_1.createClient)({
-            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
-            socket: {
-                host: `${process.env.REDIS_INSTANCE_URL}`,
-                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
-            }
-        });
-        this.publisher.connect();
-        this.subscriber.connect();
-        this.subscriptions = new Map();
-        this.reverseSubscriptions = new Map();
+        try {
+            this.subscriber = (0, redis_1.createClient)({
+                password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+                socket: {
+                    host: `${process.env.REDIS_INSTANCE_URL}`,
+                    port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+                }
+            });
+            this.publisher = (0, redis_1.createClient)({
+                password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+                socket: {
+                    host: `${process.env.REDIS_INSTANCE_URL}`,
+                    port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+                }
+            });
+            this.publisher.connect().catch((err) => {
+                console.error('Failed to connect publisher to Redis:', err);
+            });
+            this.subscriber.connect().catch((err) => {
+                console.error('Failed to connect subscriber to Redis:', err);
+            });
+            this.subscriptions = new Map();
+            this.reverseSubscriptions = new Map();
+        }
+        catch (err) {
+            console.error('Error initializing RedisSubscriptionManager:', err);
+            throw err;
+        }
     }
     static getInstance() {
         if (!this.instance) {
