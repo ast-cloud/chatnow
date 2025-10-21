@@ -8,25 +8,34 @@ export default class RedisSubscriptionManager{
     private subscriptions: Map<string, string>;
     private reverseSubscriptions: Map<string, { [userId:string] : {userId:string, ws:any}}>;
 
-    private constructor(){
-        this.subscriber = createClient({
-            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
-            socket: {
-                host: `${process.env.REDIS_INSTANCE_URL}`,
-                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
-            }
-        });
-        this.publisher = createClient({
-            password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
-            socket: {
-                host: `${process.env.REDIS_INSTANCE_URL}`,
-                port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
-            }
-        });
-        this.publisher.connect();
-        this.subscriber.connect();
-        this.subscriptions = new Map<string, string>();
-        this.reverseSubscriptions = new Map<string, { [userId:string] : {userId:string, ws:any} }>();
+    private constructor() {
+        try {
+            this.subscriber = createClient({
+                password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+                socket: {
+                    host: `${process.env.REDIS_INSTANCE_URL}`,
+                    port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+                }
+            });
+            this.publisher = createClient({
+                password: `${process.env.REDIS_INSTANCE_PASSWORD}`,
+                socket: {
+                    host: `${process.env.REDIS_INSTANCE_URL}`,
+                    port: Number(`${process.env.REDIS_INSTANCE_PORT}`)
+                }
+            });
+            this.publisher.connect().catch((err) => {
+                console.error('Failed to connect publisher to Redis:', err);
+            });
+            this.subscriber.connect().catch((err) => {
+                console.error('Failed to connect subscriber to Redis:', err);
+            });
+            this.subscriptions = new Map<string, string>();
+            this.reverseSubscriptions = new Map<string, { [userId: string]: { userId: string, ws: any } }>();
+        } catch (err) {
+            console.error('Error initializing RedisSubscriptionManager:', err);
+            throw err;
+        }
     }
 
     static getInstance(){
