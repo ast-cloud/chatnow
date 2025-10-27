@@ -28,6 +28,7 @@ class RedisSubscriptionManager {
                 }
             });
             this.publisher.connect().catch((err) => {
+                console.info('Redis URL - ', process.env.REDIS_INSTANCE_URL, ' \nPort - ', process.env.REDIS_INSTANCE_PORT);
                 console.error('Failed to connect publisher to Redis:', err);
             });
             this.subscriber.connect().catch((err) => {
